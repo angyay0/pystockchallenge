@@ -12,7 +12,7 @@ analytics_catalog = [
     AnalyticsResponse(id="ADA", algorithm="Advanced Analytics"),
 ]
 
-stock_provider:StockService=None
+stock_provider: StockService = None
 
 if provider == "alpha_vantage":
     stock_provider = AlphaVantageService(
@@ -22,3 +22,10 @@ if provider == "alpha_vantage":
     )
 else:
     stock_provider = StockService()
+
+
+def tracked_analytic(key):
+    for analytic in analytics_catalog:
+        if analytic.id == key:
+            return True
+    return False

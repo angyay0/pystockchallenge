@@ -3,13 +3,14 @@ import os
 import datetime
 
 from .database import save_changes, delete
-from api.main.services import analytics_catalog, stock_provider
+from api.main.services import analytics_catalog, stock_provider, tracked_analytic
 from api.main.models.stock_models import *
 from api.main.models.responses.api_response import APIResponse, APIResponsePaged
 from api.main.models.responses.stocks import AnalyticsResponse, AnalyticsDataResponse
 from api.main.utils.dto import stocks_to_response, stocks_portfolio_to_response
 
-provider = os.getenv('SYMBOLS_PROVIDER') or 'N/A'
+provider = os.getenv("SYMBOLS_PROVIDER") or "N/A"
+
 
 def get_analytics():
     response = APIResponsePaged(
@@ -28,7 +29,7 @@ def save_analytic(user, payload):
         )
         .first()
     )
-    if symbol:
+    if symbol and tracked_analytic(payload["analytic"]):
         analytics = UserPortfolioAnalytics.query.filter_by(
             portfolio_id=symbol.id, analytics=payload["analytic"]
         ).first()
@@ -58,7 +59,9 @@ def save_analytic(user, payload):
 
 def delete_analytics(user, payload):
     response = None
-    analytics = UserPortfolioAnalytics.query.filter_by(id=payload["id"]).first()
+    analytics = UserPortfolioAnalytics.query.filter_by(
+        analytics=payload["analytic"]
+    ).first()
     if analytics and analytics.active:
         analytics.active = False
         delete(analytics)
@@ -68,18 +71,19 @@ def delete_analytics(user, payload):
 
     return response
 
+
 def process(analytic, params):
-    
     return stock_provider.get_stock_data(
         analytic=analytic,
-        interval=params['interval'],
-        serie_type=params['type'],
-        save=params['save'],
-        period=params['period'] if params['period'] < 1 else 10
+        interval=params["interval"],
+        serie_type=params["type"],
+        save=params["save"],
+        period=params["period"] if params["period"] < 1 else 10,
     )
 
+
 def process_analytics(user, data):
-    response = APIResponse(code=-1,message='Error',data=None)
+    response = APIResponse(code=-1, message="Error", data=None)
     ids = data["ids"] or []
     if len(ids) > 0:
         collected = []
@@ -90,23 +94,17 @@ def process_analytics(user, data):
         with ThreadPoolExecutor(max_workers=len(ids)) as pool:
             for analytic in analytics:
                 analytic_result = pool.submit(process, analytic, data).result()
-                collected.append(analytic_result['data'])
-                if data['save']:
-                    binnacle= SymbolRequests(
+                collected.append(analytic_result["data"])
+                if data["save"]:
+                    binnacle = SymbolRequests(
                         user_id=analytic.Portfolio.user_id,
                         provider=provider,
-                        url=analytic_result['url'],
-                        response=analytic_result['data'],
-                        created_at=datetime.utcnow()
+                        url=analytic_result["url"],
+                        response=analytic_result["data"],
+                        created_at=datetime.utcnow(),
                     )
                     save_changes(binnacle)
 
-
-        
-        response=APIResponse(
-            code=0,
-            message='Success',
-            data=collected
-        )
+        response = APIResponse(code=0, message="Success", data=collected)
 
     return response

@@ -39,16 +39,16 @@ class SignIn(Resource):
     @auth_api.doc("SignUp user")
     @auth_api.expect(_userDto, validate=True)
     def put(self):
-        result = APIResponse(-1,'',None)
+        result = APIResponse(-1, "", None)
         data = request.json
         code = 200
         if data:
             result = sign_up(data)
-        
+
         if result:
             if result.code != 0:
                 code = 400
-        
+
         return make_response(jsonify(result.serialize()), code)
 
     @auth_api.response(401, "Unauthorized")
@@ -76,7 +76,7 @@ class SignIn(Resource):
         code = 200
         if result.code != 0:
             code = 400
-        
+
         return make_response(jsonify(result.serialize()), code)
 
 
@@ -95,4 +95,4 @@ class OTPValidate(Resource):
                     status = 400
                 return make_response(jsonify(result.serialize()), status)
 
-        return make_response('', 400)
+        return make_response("", 400)

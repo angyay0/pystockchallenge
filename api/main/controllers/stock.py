@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, jsonify, make_response
 from flask_restplus import Resource
 
 from api.main.utils.definitions import StocksDefinition
@@ -33,10 +33,11 @@ class StockAPI(Resource):
     def get(user, self):
         args = dict(request.args)
         data = get_market_symbols(args)
+        code = 200
         if data and data.code != 0:
-            stock_api.response(400, "Bad Request")
+            code = 400
 
-        return data.serialize()
+        return make_response(jsonify(data.serialize()), code)
 
 
 @stock_api.route("/portfolio")
@@ -50,10 +51,11 @@ class UserStockPortfolio(Resource):
     def get(user, self):
         args = dict(request.args)
         data = get_user_stock_portfolio(user, args)
+        code = 200
         if data and data.code != 0:
-            stock_api.response(400, "Bad Request")
+            code = 400
 
-        return data.serialize()
+        return make_response(jsonify(data.serialize()), code)
 
     @stock_api.doc("Save/Activate Portfolio Symbols")
     @stock_api.expect(stockPortfolio, validate=True)
@@ -61,20 +63,22 @@ class UserStockPortfolio(Resource):
     def put(user, self):
         data = request.json
         data = save_user_stock_portfolio(user, data)
+        code = 200
         if data and data.code != 0:
-            stock_api.response(400, "Bad Request")
+            code = 400
 
-        return data.serialize()
+        return make_response(jsonify(data.serialize()), code)
 
     @stock_api.doc("Remove Symbol from Portfolio")
     @token_required
     def delete(user, self):
         data = request.json
         data = soft_delete_from_portfolio(user, data)
+        code = 200
         if data and data.code != 0:
-            stock_api.response(400, "Bad Request")
+            code = 400
 
-        return data.serialize()
+        return make_response(jsonify(data.serialize()), code)
 
 
 @stock_api.route("/analytics")
@@ -95,10 +99,11 @@ class PortfolioStockAnalytics(Resource):
     def post(user, self):
         data = request.json
         response = process_analytics(user, data)
+        code = 200
         if response and response.code != 0:
-            stock_api.response(400, "Bad Requeset")
+            code = 400
 
-        return response.serialize()
+        return make_response(jsonify(response.serialize()), code)
 
     @stock_api.doc("Save/Activate Stocks Analytics")
     @stock_api.expect(analyticsSymbol, validate=True)
@@ -106,10 +111,11 @@ class PortfolioStockAnalytics(Resource):
     def put(user, self):
         data = request.json
         response = save_analytic(user, data)
+        code = 200
         if response and response.code != 0:
-            stock_api.response(400, "Bad Request")
+            code = 400
 
-        return response.serialize()
+        return make_response(jsonify(response.serialize()), code)
 
     @stock_api.doc("Remove Symbol Analytics")
     @stock_api.expect(analyticsSymbol, validate=False)
@@ -117,7 +123,8 @@ class PortfolioStockAnalytics(Resource):
     def delete(user, self):
         data = request.json
         data = delete_analytics(user, data)
+        code = 200
         if data and data.code != 0:
-            stock_api.response(400, "Bad Request")
+            code = 400
 
-        return data.serialize()
+        return make_response(jsonify(data.serialize()), code)

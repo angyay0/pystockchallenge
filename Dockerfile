@@ -14,8 +14,7 @@ ENV PORT 5001
 #Disable Debug Flask 
 ENV FLASK_DEBUG 0
 #Adding Files and setting up wdir
-COPY . /api
-WORKDIR /api
+COPY . .
 #Installing Requirements
 RUN apt-get update && apt-get -y install libpq-dev gcc && pip install psycopg2
 RUN pip3 install -r requirements.txt

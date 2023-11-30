@@ -57,7 +57,9 @@ class UserStockPortfolio(db.Model):
     active = db.Column(db.Boolean, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
     updated_at = db.Column(db.DateTime, nullable=False)
-    analytics = db.relationship("UserPortfolioAnalytics", backref="Portfolio", lazy=True)
+    analytics = db.relationship(
+        "UserPortfolioAnalytics", backref="Portfolio", lazy=True
+    )
 
     def __repr__(self) -> str:
         return "<User Stock Portfolio'{}'".format(self.symbol)

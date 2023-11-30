@@ -83,7 +83,9 @@ class StocksDefinition:
             ),
             "interval": fields.String(required=True, description="Analytic interval"),
             "type": fields.String(required=True, description="Analytic serie type"),
-            "period": fields.Integer(required=True, description="Analytics Period segment"),
+            "period": fields.Integer(
+                required=True, description="Analytics Period segment"
+            ),
             "save": fields.Boolean(
                 required=True, description="Wheter if save data request or not"
             ),

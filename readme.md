@@ -69,7 +69,7 @@ To run locally do the following:
 docker build -t angyay0/stock-take-home .
 
 #run
-docker run -d -p 81:5000 angyay0/stock-take-home --env-file .env
+docker run --env-file=.env  -d -p 81:5001 angyay0/stock-take-home
 ```
 
 ## K8s 

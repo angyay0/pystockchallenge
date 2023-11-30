@@ -6,7 +6,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY")
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://stock:jwt78IF&33G=@localhost/stock'
+    SQLALCHEMY_DATABASE_URI = postgres_data_base #replace for migrating outside server
     DEBUG = False
 
 
