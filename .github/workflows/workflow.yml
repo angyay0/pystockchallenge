@@ -1,0 +1,47 @@
+name: Deploy through Digital Ocean
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Create ENV File
+      run: |
+        touch .env
+        echo "${{ secrets.AWS_KEY }}" > .env
+        echo "${{ secrets.AWS_REGION }}" > .env
+        echo "${{ secrets.AWS_SECRET }}" > .env
+        echo "${{ secrets.ENV }}" > .env
+        echo "${{ secrets.PGSTRING }}" > .env
+        echo "${{ secrets.PORT }}" > .env
+        echo "${{ secrets.SECRET_KEY }}" > .env
+        echo "${{ secrets.SYMBOLS_KEY }}" > .env
+        echo "${{ secrets.SYMBOLS_PROVIDER }}" > .env
+        echo "${{ secrets.SYMBOLS_SECRET }}" > .env
+        echo "${{ secrets.SYMBOLS_URL }}" > .env
+
+    # Install doctl.
+    - name: Install doctl
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    
+    # Build a Docker image of your application in your registry and tag the image with the $GITHUB_SHA.
+    - name: Build container image
+      run: docker build -t ${{ secrets.REGISTRY_NAME }}/pystockchallenge:$(echo $GITHUB_SHA | head -c7) .
+
+    - name: Log in to DigitalOcean Container Registry with short-lived credentials
+      run: doctl registry login --expiry-seconds 1200
+
+    - name: Push image to DigitalOcean Container Registry
+      run: docker push ${{ secrets.REGISTRY_NAME }}/pystockchallenge:$(echo $GITHUB_SHA | head -c7)
