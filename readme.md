@@ -73,7 +73,7 @@ docker run --env-file=.env  -d -p 81:5001 angyay0/stock-take-home
 ```
 
 ## K8s 
-Placeholder
+This project contains the image building, k8s files is left.
 
 ## About CI/CD
 This project includes deployment validations, workflow and more tooling using Github actions, you can fin them inside `.github/workflow/` for the current pipeline.

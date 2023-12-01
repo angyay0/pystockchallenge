@@ -1,0 +1,439 @@
+{
+	"info": {
+		"_postman_id": "1754035d-34ec-4da9-af6f-823b5ea8c62d",
+		"name": "Stocks",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3852668"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"test@mail.com\",\n    \"password\":\"Testing1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Signup",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"tester@test.com\",\n  \"password\": \"Testing1\",\n  \"name\": \"Test\",\n  \"last_name\": \"Test\",\n  \"phone_number\": \"1234123456\",\n  \"otp\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OTP Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"token\": \"JWT Pre Auth Token\",\n  \"code\": \"SMS received token\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/user/tfa",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"user",
+								"tfa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/auth/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit User",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"password\": \"Testing1\",\n  \"name\": \"Test\",\n  \"last_name\": \"Test\",\n  \"phone_number\": \"1234123456\",\n  \"otp\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Stocks",
+			"item": [
+				{
+					"name": "Get Symbols Params",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/stocks?page=1&size=2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"stocks"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "size",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Symbols (ALL)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/stocks",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"stocks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Available Analytics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/stocks/analytics",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"stocks",
+								"analytics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Portfolio",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/stocks/portfolio",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"stocks",
+								"portfolio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add to Portfolio",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"symbol\": \"AAA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/stocks/portfolio",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"stocks",
+								"portfolio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove from Portfolio",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"symbol\": \"AAA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/stocks/portfolio",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"stocks",
+								"portfolio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Symbol Analytics",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"symbol\": \"AA\",\n    \"analytic\": \"SMA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/stocks/analytics",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"stocks",
+								"analytics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Symbol Analytics",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"symbol\": \"AA\",\n    \"analytic\": \"SMA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/stocks/analytics",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"stocks",
+								"analytics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Perform Analytics",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ids\":[\n        1\n    ],\n    \"interval\":\"weekly\",\n    \"type\":\"open\",\n    \"period\":1,\n    \"save\":true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/stocks/analytics",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"stocks",
+								"analytics"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/health",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
