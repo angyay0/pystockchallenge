@@ -1,0 +1,371 @@
+swagger: '2.0'
+basePath: /
+paths:
+  /auth/user:
+    put:
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Error
+      operationId: SignUp user
+      parameters:
+        - name: payload
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/userModel'
+      tags:
+        - Auth
+    post:
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Error
+      operationId: SignIn user
+      parameters:
+        - name: payload
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/signInModel'
+      tags:
+        - Auth
+    patch:
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Error
+        '401':
+          description: Unauthorized
+      operationId: Update User
+      parameters:
+        - name: payload
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/userUpdateModel'
+      tags:
+        - Auth
+    delete:
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Error
+        '401':
+          description: Unauthorized
+      operationId: Deactivate User
+      tags:
+        - Auth
+  /auth/user/tfa:
+    post:
+      responses:
+        '200':
+          description: Success
+      operationId: OTP execute
+      parameters:
+        - name: payload
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/otpModel'
+      tags:
+        - Auth
+  /health/:
+    get:
+      responses:
+        '200':
+          description: Success
+      operationId: Get Health
+      tags:
+        - Health
+  /stocks/:
+    get:
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Unauthorized
+      operationId: Get Market Symbols
+      tags:
+        - Stocks
+  /stocks/analytics:
+    put:
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Unauthorized
+      operationId: Save/Activate Stocks Analytics
+      parameters:
+        - name: payload
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/stockAnalyticsModel'
+      tags:
+        - Stocks
+    post:
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Unauthorized
+      operationId: Get Analytics Processing
+      parameters:
+        - name: payload
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/analyzeModel'
+      tags:
+        - Stocks
+    get:
+      responses:
+        '200':
+          description: Success
+          headers:
+            Authorization:
+              description: Bearer
+              type: string
+        '400':
+          description: Bad Request
+          headers:
+            Authorization:
+              description: Bearer
+              type: string
+        '401':
+          description: Unauthorized
+          headers:
+            Authorization:
+              description: Bearer
+              type: string
+        '403':
+          description: Unauthorized
+          headers:
+            Authorization:
+              description: Bearer
+              type: string
+      operationId: Get Analytics Available
+      tags:
+        - Stocks
+    delete:
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Unauthorized
+      operationId: Remove Symbol Analytics
+      parameters:
+        - name: payload
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/stockAnalyticsModel'
+      tags:
+        - Stocks
+  /stocks/portfolio:
+    put:
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Unauthorized
+      operationId: Save/Activate Portfolio Symbols
+      parameters:
+        - name: payload
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/stockPortfolioModel'
+      tags:
+        - Stocks
+    get:
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Unauthorized
+      operationId: Get Portfolio Symbols
+      tags:
+        - Stocks
+    delete:
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Unauthorized
+      operationId: Remove Symbol from Portfolio
+      tags:
+        - Stocks
+info:
+  title: API
+  version: 1.0.0
+  description: Stock Take Home API
+produces:
+  - application/json
+consumes:
+  - application/json
+tags:
+  - name: Health
+    description: Health API
+  - name: Auth
+    description: Authentication API
+  - name: Stocks
+    description: Stock Market API
+definitions:
+  userModel:
+    required:
+      - email
+      - last_name
+      - name
+      - password
+    properties:
+      email:
+        type: string
+        description: Email
+      password:
+        type: string
+        description: Password
+      name:
+        type: string
+        description: Name
+      last_name:
+        type: string
+        description: Lastname
+      phone_number:
+        type: string
+        description: Phone
+      otp:
+        type: boolean
+        description: Enable OTP
+        default: false
+    type: object
+  signInModel:
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+        description: Email
+      password:
+        type: string
+        description: Password
+    type: object
+  userUpdateModel:
+    properties:
+      password:
+        type: string
+        description: Password
+      name:
+        type: string
+        description: Name
+      last_name:
+        type: string
+        description: Lastname
+      phone_number:
+        type: string
+        description: Phone
+      otp:
+        type: boolean
+        description: Enable OTP
+        default: false
+    type: object
+  otpModel:
+    required:
+      - code
+      - token
+    properties:
+      token:
+        type: string
+        description: Transaction Token
+      code:
+        type: string
+        description: OTP
+    type: object
+  stockPortfolioModel:
+    required:
+      - symbol
+    properties:
+      symbol:
+        type: string
+        description: The stock symbol you want to add to portfolio
+    type: object
+  stockAnalyticsModel:
+    required:
+      - analytic
+      - symbol
+    properties:
+      id:
+        type: integer
+        description: Analytics Symbol Id
+      symbol:
+        type: string
+        description: The stock symbol you want to add to portfolio
+      analytic:
+        type: string
+        description: The stock Anaytic you want to tie to analytic
+    type: object
+  analyzeModel:
+    required:
+      - ids
+      - interval
+      - period
+      - save
+      - type
+    properties:
+      ids:
+        type: array
+        description: Stock Analytics Id
+        items:
+          type: integer
+      interval:
+        type: string
+        description: Analytic interval
+      type:
+        type: string
+        description: Analytic serie type
+      period:
+        type: integer
+        description: Analytics Period segment
+      save:
+        type: boolean
+        description: Wheter if save data request or not
+    type: object
+responses:
+  ParseError:
+    description: When a mask can't be parsed
+  MaskError:
+    description: When any error occurs on mask
